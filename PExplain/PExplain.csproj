@@ -43,6 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Output\FormatUtils.cs" />
+    <Compile Include="Output\IGroup.cs" />
+    <Compile Include="Output\Row.cs" />
+    <Compile Include="Output\Table.cs" />
     <Compile Include="PortableExecutable\Characteristics.cs" />
     <Compile Include="PortableExecutable\CoffFileHeader.cs" />
     <Compile Include="PortableExecutable\CorFlags.cs" />
@@ -51,6 +55,7 @@
     <Compile Include="PortableExecutable\DataDirectory.cs" />
     <Compile Include="PortableExecutable\DllCharacteristics.cs" />
     <Compile Include="PortableExecutable\DosHeader.cs" />
+    <Compile Include="PortableExecutable\IInfo.cs" />
     <Compile Include="PortableExecutable\Info.cs" />
     <Compile Include="PortableExecutable\MachineTypes.cs" />
     <Compile Include="PortableExecutable\Magic.cs" />

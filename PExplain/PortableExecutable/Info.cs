@@ -2,7 +2,7 @@
 
 namespace PExplain.PortableExecutable
 {
-    public class Info<T>
+    public class Info<T> : IInfo
     {
         public static Info<T> ConvertFrom<U>(Info<U> info)
         {
@@ -14,6 +14,7 @@ namespace PExplain.PortableExecutable
         public byte[] Bytes { get; }
         public int Size => Bytes.Length;
         public T Value { get; }
+        object IInfo.Value => Value;
 
         public Info(long offset, byte[] bytes, T value)
         {

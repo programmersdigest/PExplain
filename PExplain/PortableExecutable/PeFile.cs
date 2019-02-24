@@ -9,14 +9,17 @@ namespace PExplain.PortableExecutable
         private readonly long _optionalHeaderOffset;
         private readonly long _sectionTableOffset;
 
+        public string Path { get; }
         public DosHeader DosHeader { get; }
         public CoffFileHeader CoffFileHeader { get; }
         public OptionalHeader OptionalHeader { get; }
         public SectionTable SectionTable { get; }
-        public CorMetaHeader CorMetaHeader { get; }
+        public CorMetaHeader CorHeader { get; }
 
         public PeFile(string path)
         {
+            Path = path;
+
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new PeInfoReader(stream))
             {
@@ -43,7 +46,7 @@ namespace PExplain.PortableExecutable
                     var clrHeaderOffset = section.PointerToRawData.Value + (clrHeaderDirectory.VirtualAddress.Value - section.VirtualAddress.Value);
 
                     stream.Seek(clrHeaderOffset, SeekOrigin.Begin);
-                    CorMetaHeader = new CorMetaHeader(reader);
+                    CorHeader = new CorMetaHeader(reader);
                 }
             }
         }
