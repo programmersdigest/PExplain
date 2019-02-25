@@ -1,10 +1,11 @@
 ﻿using System.IO;
+using System.Text;
 
 namespace PExplain.PortableExecutable
 {
     public class DosHeader
     {
-        public Info<ushort> Magic { get; set; }
+        public Info<string> FileSignature { get; set; }
         public Info<ushort> BytesOnLastPage { get; set; }
         public Info<ushort> PagesInFile { get; set; }
         public Info<ushort> Relocations { get; set; }
@@ -35,10 +36,11 @@ namespace PExplain.PortableExecutable
         public Info<ushort> Reserved13 { get; set; }
         public Info<ushort> Reserved14 { get; set; }
         public Info<ushort> CoffHeaderAddress { get; set; }
+        public Info<string> DosStub { get; set; }
 
         public DosHeader(PeInfoReader reader)
         {
-            Magic = reader.ReadWord();
+            FileSignature = reader.ReadString(2, Encoding.ASCII);
             BytesOnLastPage = reader.ReadWord();
             PagesInFile = reader.ReadWord();
             Relocations = reader.ReadWord();
@@ -69,6 +71,7 @@ namespace PExplain.PortableExecutable
             Reserved13 = reader.ReadWord();
             Reserved14 = reader.ReadWord();
             CoffHeaderAddress = reader.ReadWord();
+            DosStub = reader.ReadString(CoffHeaderAddress.Value - (int)reader.BaseStream.Position, Encoding.ASCII);
         }
     }
 }

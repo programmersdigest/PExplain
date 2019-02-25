@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -70,6 +71,20 @@ namespace PExplain.Output
                 }
             }
             return literal.ToString();
+        }
+
+        public static IEnumerable<string> Split(this string value, int partLength)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                yield return null;
+            }
+
+            for (var i = 0; i < value.Length; i += partLength)
+            {
+                var length = Math.Min(partLength, value.Length - i);
+                yield return value.Substring(i, length);
+            }
         }
     }
 }

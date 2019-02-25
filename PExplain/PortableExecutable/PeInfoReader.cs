@@ -6,16 +6,16 @@ namespace PExplain.PortableExecutable
 {
     public class PeInfoReader : IDisposable
     {
-        private Stream _stream;
+        public Stream BaseStream { get; }
 
         public PeInfoReader(Stream stream)
         {
-            _stream = stream;
+            BaseStream = stream;
         }
 
         public void Dispose()
         {
-            _stream?.Dispose();
+            BaseStream?.Dispose();
         }
 
         public Info<byte> ReadByte()
@@ -66,10 +66,10 @@ namespace PExplain.PortableExecutable
 
         private Info<T> Read<T>(int size, Func<byte[], int, T> converter)
         {
-            var offset = _stream.Position;
+            var offset = BaseStream.Position;
 
             var bytes = new byte[size];
-            _stream.Read(bytes, 0, size);
+            BaseStream.Read(bytes, 0, size);
 
             var value = converter(bytes, 0);
 

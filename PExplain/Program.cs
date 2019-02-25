@@ -6,11 +6,15 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace PExplain
 {
     class Program
     {
+        private const int _maxRawDataColumnWidth = 23;
+        private const int _maxValueColumnWidth = 40;
+
         static void Main(string[] args)
         {
             var path = args.FirstOrDefault();
@@ -51,8 +55,8 @@ namespace PExplain
                 var fieldWidth = Math.Max(rows.Max(r => r.Field.Length), "Field".Length);
                 var offsetWidth = Math.Max(rows.Max(r => r.Offset.Length), "Offset".Length);
                 var sizeWidth = Math.Max(rows.Max(r => r.Size.Length), "Width".Length);
-                var rawBytesWidth = Math.Max(rows.Max(r => r.RawData.Length), "Bytes".Length);
-                var valueWidth = Math.Max(rows.Max(r => r.Value.Length), "Value".Length);
+                var rawBytesWidth = Math.Min(Math.Max(rows.Max(r => r.RawData.Length), "Bytes".Length), _maxRawDataColumnWidth);
+                var valueWidth = Math.Min(Math.Max(rows.Max(r => r.Value.Length), "Value".Length), _maxValueColumnWidth);
                 rowFormat = $"{indentation}| {{0,{fieldWidth}}} | {{1,{offsetWidth}}} | {{2,{sizeWidth}}} | {{3,{rawBytesWidth}}} | {{4,{valueWidth}}} |";
 
                 Console.WriteLine(rowFormat, "Field", "Offset", "Width", "Bytes", "Value");
@@ -66,7 +70,24 @@ namespace PExplain
                         PrintResultTableToConsole(subtable, level + 1);
                         break;
                     case Row row:
-                        Console.WriteLine(rowFormat, row.Field, row.Offset, row.Size, row.RawData, row.Value);
+                        var rawDataLines = Regex.Matches(row.RawData, @"( ?[0-9A-F]{2}){1,8}");
+                        var valueLines = row.Value.Split(_maxValueColumnWidth);
+
+                        for (int i = 0; i < rawDataLines.Count && i < valueLines.Count(); i++)
+                        {
+                            var rawData = rawDataLines.Count >= i ? rawDataLines[i].Value.Trim() : "";
+                            var value = valueLines.ElementAtOrDefault(i) ?? "";
+
+                            if (i == 0)
+                            {
+                                Console.WriteLine(rowFormat, row.Field, row.Offset, row.Size, rawData, value);
+                            }
+                            else
+                            {
+                                Console.WriteLine(rowFormat, "", "", "", rawData, value);
+                            }
+                        }
+
                         break;
                 }
             }
