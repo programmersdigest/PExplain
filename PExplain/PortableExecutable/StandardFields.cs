@@ -27,6 +27,10 @@
             {
                 BaseOfData = reader.ReadDWord();
             }
+            else
+            {
+                BaseOfData = new Info<uint>(0, new byte[0], 0);
+            }
         }
     }
 }

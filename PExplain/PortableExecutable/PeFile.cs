@@ -39,7 +39,7 @@ namespace PExplain.PortableExecutable
 
                 // Read CLR header.
                 var clrHeaderDirectory = OptionalHeader.DataDirectories.ClrRuntimeHeader;
-                if (clrHeaderDirectory != DataDirectory.Empty)
+                if (clrHeaderDirectory.VirtualAddress.Value > 0 && clrHeaderDirectory.Size.Value > 0)
                 {
                     var section = SectionTable.First(s => s.VirtualAddress.Value <= clrHeaderDirectory.VirtualAddress.Value &&
                                                           s.VirtualAddress.Value + s.VirtualSize.Value >= clrHeaderDirectory.VirtualAddress.Value);
