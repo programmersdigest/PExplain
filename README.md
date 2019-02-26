@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/github/programmersdigest/PExplain?branch=master&svg=true)](https://ci.appveyor.com/api/projects/status/github/programmersdigest/PExplain?branch=master&svg=true)
 # PExplain
 Prints detailed info on the contents of a PE file.
 
